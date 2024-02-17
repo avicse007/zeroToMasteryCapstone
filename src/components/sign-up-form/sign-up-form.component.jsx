@@ -17,7 +17,6 @@ const defaultFormField = {
 
 const SignUpForm = () => {
   const [formField, setFormField] = useState(defaultFormField);
-
   const { displayName, email, password, confirmPassword } = formField;
   console.log(formField);
 
@@ -31,12 +30,15 @@ const SignUpForm = () => {
     const { email, password, confirmPassword } = formField;
     if (password === confirmPassword) {
       try {
-        const user = await createAuthUserWithEmailAndPassword(email, password);
-        console.log("User Creation response ", user);
-        const result = await createUserDocumentFromAuth(user.user, {
+        const authenticatedUser = await createAuthUserWithEmailAndPassword(
+          email,
+          password
+        );
+        console.log("User Creation response ", authenticatedUser);
+        const user = await createUserDocumentFromAuth(authenticatedUser.user, {
           displayName,
         });
-        console.log("User Creation result ", result);
+        console.log("User Creation result ", user);
         resetForm();
       } catch (error) {
         if (error.code === "auth/email-already-in-use") {
